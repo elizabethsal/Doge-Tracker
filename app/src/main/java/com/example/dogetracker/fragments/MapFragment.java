@@ -30,5 +30,7 @@ public class MapFragment extends Fragment {
 
         MapView mapView = view.findViewById(R.id.map_view);
         FloatingActionButton buttonCurrentLocation = view.findViewById(R.id.button_current_location);
+
+
     }
 }
