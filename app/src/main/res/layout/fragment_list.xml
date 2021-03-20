@@ -14,13 +14,6 @@
         android:background="@color/purple_500"
         app:titleTextColor="@android:color/white">
 
-        <Button
-            android:id="@+id/button_search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableTop="@drawable/ic_baseline_search_24"
-            />
-
 
     </androidx.appcompat.widget.Toolbar>
 

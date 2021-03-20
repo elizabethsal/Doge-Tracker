@@ -31,7 +31,7 @@ public class ListFragment extends Fragment {
         toolbar.setTitle("Doge Tracker");
 
         TextView textView = view.findViewById(R.id.text_view);
-        Button buttonSearch = view.findViewById(R.id.button_search);
+
 
     }
 }
