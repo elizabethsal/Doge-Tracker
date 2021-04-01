@@ -14,11 +14,12 @@ import com.example.dogetracker.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
-    public MapView mapView;
+  //  public MapView mapView;
 
     @Nullable
     @Override
@@ -47,12 +48,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
     }
+/*
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    //    mapView.getMapAsync(this);
-    }
-
+        MapFragment mapFragment = (MapFragment) getFragmentManager()
+                .findFragmentById(R.id.map_view);
+     }
+*/
     @Override
     public void onStart() {
         super.onStart();
