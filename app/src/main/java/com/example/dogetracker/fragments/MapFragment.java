@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -14,12 +15,13 @@ import com.example.dogetracker.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
-  //  public MapView mapView;
+    public MapView mapView;
+    private GoogleMap googleMap;
+
 
     @Nullable
     @Override
@@ -34,68 +36,58 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.app_name);
 
-        MapView mapView = view.findViewById(R.id.map_view);
+     //   MapView mapView = view.findViewById(R.id.map_view);
         FloatingActionButton buttonCurrentLocation = view.findViewById(R.id.button_current_location);
-
+        mapView =  view.findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
+        mapView.onResume();
         mapView.getMapAsync(this);
 
-
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-
-
-    }
 /*
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MapFragment mapFragment = (MapFragment) getFragmentManager()
-                .findFragmentById(R.id.map_view);
-     }
+    }
 */
     @Override
     public void onStart() {
         super.onStart();
-      //  mapView.onStart();
     }
-
+/*
     @Override
     public void onResume() {
         super.onResume();
-      //  mapView.onResume();
     }
-
+*/
     @Override
     public void onPause() {
         super.onPause();
-    //    mapView.onPause();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-      //  mapView.onStop();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-   //     mapView.onDestroy();
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-    //    mapView.onSaveInstanceState(outState);
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-    //    mapView.onLowMemory();
     }
 
+    @Override
+    public void onMapReady(GoogleMap map) {
+        googleMap = map;
+    }
 }
