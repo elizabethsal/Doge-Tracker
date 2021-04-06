@@ -1,6 +1,7 @@
 package com.example.dogetracker.fragments;
 
 
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -24,10 +25,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private MapView mapView;
     private GoogleMap googleMap;
+    private Context context;
     private static final String FINE_LOCATION = android.Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = android.Manifest.permission.ACCESS_COARSE_LOCATION;
     public boolean locationPermission = false;
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 237;
+
+
 
 
     @Nullable
@@ -50,19 +54,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
      //   MapView mapView = view.findViewById(R.id.map_view);
         FloatingActionButton buttonCurrentLocation = view.findViewById(R.id.button_current_location);
         mapView =  view.findViewById(R.id.map_view);
-        mapView.onCreate(savedInstanceState);
-        mapView.onResume();
-        mapView.getMapAsync(this);
 
-
+        mapView.getMapAsync(this);//ассинхронная задача
 
     }
 
+
     private void getLocationPermission() {
         String[] permissions = {FINE_LOCATION, COARSE_LOCATION};
+      
 
-        if (ContextCompat.checkSelfPermission(this, FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(context, FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(context, COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationPermission = true;
         } else {
             requestPermissions( permissions,
@@ -92,6 +95,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap map) {
         googleMap = map;
         getLocationPermission();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mapView.onCreate(savedInstanceState);
+
     }
 
     @Override
