@@ -54,16 +54,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
      //   MapView mapView = view.findViewById(R.id.map_view);
         FloatingActionButton buttonCurrentLocation = view.findViewById(R.id.button_current_location);
         mapView =  view.findViewById(R.id.map_view);
+        mapView.onCreate(savedInstanceState);
 
         mapView.getMapAsync(this);//ассинхронная задача
 
     }
 
-
     private void getLocationPermission() {
         String[] permissions = {FINE_LOCATION, COARSE_LOCATION};
-      
-
+        Context context = getActivity();
         if (ContextCompat.checkSelfPermission(context, FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(context, COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationPermission = true;
@@ -100,7 +99,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mapView.onCreate(savedInstanceState);
+        if(mapView != null){
+            mapView.onCreate(savedInstanceState);
+        }
 
     }
 
