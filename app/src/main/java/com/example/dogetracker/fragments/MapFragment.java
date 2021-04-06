@@ -1,5 +1,7 @@
 package com.example.dogetracker.fragments;
 
+
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.dogetracker.R;
@@ -21,6 +24,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private MapView mapView;
     private GoogleMap googleMap;
+    private static final String FINE_LOCATION = android.Manifest.permission.ACCESS_FINE_LOCATION;
+    private static final String COARSE_LOCATION = android.Manifest.permission.ACCESS_COARSE_LOCATION;
+    public boolean locationPermission = false;
+    public static final int LOCATION_PERMISSION_REQUEST_CODE = 237;
 
 
     @Nullable
@@ -47,19 +54,44 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mapView.onResume();
         mapView.getMapAsync(this);
 
+
+
     }
 
-/*
+    private void getLocationPermission() {
+        String[] permissions = {FINE_LOCATION, COARSE_LOCATION};
+
+        if (ContextCompat.checkSelfPermission(this, FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationPermission = true;
+        } else {
+            requestPermissions( permissions,
+                    LOCATION_PERMISSION_REQUEST_CODE);
+        }
+    }
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-*/
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        locationPermission = false;
+        switch (requestCode) {
+            case LOCATION_PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < grantResults.length; i++) {
+                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                            locationPermission = false;
+                            return;
+                        }
+                        locationPermission = true;
 
+                    }
+                }
+        }
+    }
 
     @Override
     public void onMapReady(GoogleMap map) {
         googleMap = map;
+        getLocationPermission();
     }
 
     @Override
