@@ -30,9 +30,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public boolean locationPermission = false;
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 237;
 
-
-
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -42,7 +39,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     /**
      * Check location permissions
      * if "yes" subscribe to location changes via SystemLocationManager
-     * checking locationPermissions before every attempt of subscribing to location permissions*/
+     * checking locationPermissions before every attempt of subscribing to location permissions
+     */
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -50,23 +48,28 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.app_name);
 
-     //   MapView mapView = view.findViewById(R.id.map_view);
+        //   MapView mapView = view.findViewById(R.id.map_view);
         FloatingActionButton buttonCurrentLocation = view.findViewById(R.id.button_current_location);
-        mapView =  view.findViewById(R.id.map_view);
+        mapView = view.findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
 
-        mapView.getMapAsync(this);//ассинхронная задача
-
+        mapView.getMapAsync(this);//асинхронная задача
+        buttonCurrentLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getLocationPermission();
+            }
+        });
     }
 
     private void getLocationPermission() {
         String[] permissions = {FINE_LOCATION, COARSE_LOCATION};
         Context context = getActivity();
-               if (ContextCompat.checkSelfPermission(context, FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+        if (ContextCompat.checkSelfPermission(context, FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(context, COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationPermission = true;
         } else {
-            requestPermissions( permissions,
+            requestPermissions(permissions,
                     LOCATION_PERMISSION_REQUEST_CODE);
         }
     }
@@ -92,13 +95,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap map) {
         googleMap = map;
-        getLocationPermission();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(mapView != null){
+        if (mapView != null) {
             mapView.onCreate(savedInstanceState);
         }
 
