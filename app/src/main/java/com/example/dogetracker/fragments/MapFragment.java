@@ -16,12 +16,13 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.dogetracker.R;
+import com.example.dogetracker.location.LocationChanged;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback {
+public class MapFragment extends Fragment implements OnMapReadyCallback, LocationChanged {
 
     private MapView mapView;
     private GoogleMap googleMap;
@@ -60,6 +61,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 getLocationPermission();
             }
         });
+
+
+
     }
 
     private void getLocationPermission() {
@@ -73,7 +77,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     LOCATION_PERMISSION_REQUEST_CODE);
         }
     }
-
+/*
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         locationPermission = false;
@@ -91,6 +95,23 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 }
         }
     }
+*/
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        locationPermission= false;
+        switch (requestCode) {
+            case LOCATION_PERMISSION_REQUEST_CODE: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    locationPermission = true;
+                }
+            }
+        }
+    }
+
+
 
     @Override
     public void onMapReady(GoogleMap map) {

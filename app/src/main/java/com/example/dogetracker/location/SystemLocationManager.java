@@ -45,6 +45,7 @@ public class SystemLocationManager implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
+        LocationChanged.location(this);
 
     }
 
