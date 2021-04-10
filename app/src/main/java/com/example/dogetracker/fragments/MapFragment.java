@@ -34,6 +34,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private SystemLocationManager systemLocationManager;
 
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -61,22 +62,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         buttonCurrentLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getLocationPermission();
-
+                if(getLocationPermission()){
+                    systemLocationManager.getLastLocation();
+                }
             }
         });
 
 
     }
 
-    private void getLocationPermission() {
+    private boolean getLocationPermission() {
         String[] permissions = {FINE_LOCATION, COARSE_LOCATION};
         Context context = getActivity();
         if (ContextCompat.checkSelfPermission(context, FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(context, COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             initLocationManager();
+             return true;
         } else {
             requestPermissions(permissions, LOCATION_PERMISSION_REQUEST_CODE);
+            return false;
         }
 
     }
@@ -113,7 +117,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     }
 
     private void initLocationManager(){
-        if (systemLocationManager != null) {
+        if (systemLocationManager == null) {
             systemLocationManager = new SystemLocationManager(getActivity(), this);
         }
     }

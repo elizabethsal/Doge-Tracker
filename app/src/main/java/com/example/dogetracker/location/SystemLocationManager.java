@@ -8,6 +8,7 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 
 
@@ -24,6 +25,9 @@ public class SystemLocationManager implements LocationListener {
     private static final long MIN_UPDATE_INTERVAL_MS = 1000;
     private static final float MIN_DISTANCE_CHANGE_UPDATES_M = 0;
     private LocationChanged locationChanged;
+    private Location lastLocation;
+
+
 
 
     public SystemLocationManager(Context context, LocationChanged locationChanged) {
@@ -42,16 +46,25 @@ public class SystemLocationManager implements LocationListener {
             throw new NullPointerException("No location providers");
         }
 
-        locationManager.requestLocationUpdates(providers.get(0), MIN_UPDATE_INTERVAL_MS, MIN_DISTANCE_CHANGE_UPDATES_M, this);
+        locationManager.requestLocationUpdates(providers.get(1), MIN_UPDATE_INTERVAL_MS, MIN_DISTANCE_CHANGE_UPDATES_M, this);
         this.locationChanged = locationChanged;
+
 
     }
 
+    @Nullable
+    public  Location getLastLocation(){
+        return this.lastLocation;
+    }
 
     @Override
     public void onLocationChanged(Location location) {
         locationChanged.onNewLocation(location);
+        lastLocation = location;
+
     }
+
+
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
