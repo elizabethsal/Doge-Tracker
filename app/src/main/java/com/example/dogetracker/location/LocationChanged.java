@@ -1,12 +1,10 @@
 package com.example.dogetracker.location;
 
 
+import android.location.Location;
 
 public interface LocationChanged {
 
-    static void location(SystemLocationManager systemLocationManager) {
-
-    }
-
+    void onNewLocation(Location location);
 
 }

@@ -3,6 +3,7 @@ package com.example.dogetracker.fragments;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.dogetracker.R;
 import com.example.dogetracker.location.LocationChanged;
+import com.example.dogetracker.location.SystemLocationManager;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -28,8 +30,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     private GoogleMap googleMap;
     private static final String FINE_LOCATION = android.Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = android.Manifest.permission.ACCESS_COARSE_LOCATION;
-    public boolean locationPermission = false;
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 237;
+    private SystemLocationManager systemLocationManager;
+
 
     @Nullable
     @Override
@@ -59,9 +62,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
             @Override
             public void onClick(View v) {
                 getLocationPermission();
+
             }
         });
-
 
 
     }
@@ -71,47 +74,49 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         Context context = getActivity();
         if (ContextCompat.checkSelfPermission(context, FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(context, COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationPermission = true;
+            initLocationManager();
         } else {
-            requestPermissions(permissions,
-                    LOCATION_PERMISSION_REQUEST_CODE);
+            requestPermissions(permissions, LOCATION_PERMISSION_REQUEST_CODE);
         }
-    }
-/*
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        locationPermission = false;
-        switch (requestCode) {
-            case LOCATION_PERMISSION_REQUEST_CODE:
-                if (grantResults.length > 0) {
-                    for (int i = 0; i < grantResults.length; i++) {
-                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                            locationPermission = false;
-                            return;
-                        }
-                        locationPermission = true;
 
-                    }
-                }
-        }
     }
-*/
+
+
+    /*
+     * [0] = 1
+     * [1] = 4
+     * [2] = 4
+     * [3] = 7
+     * [4] = 0
+     *
+     * length == 5
+     * */
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String permissions[],
+                                           @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        locationPermission= false;
+
         switch (requestCode) {
             case LOCATION_PERMISSION_REQUEST_CODE: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    locationPermission = true;
+                boolean isPermissionsGranted = true;
+                for (int i = 0; i < grantResults.length; i++) {
+                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                        isPermissionsGranted = false;
+                        break;
+                    }
+                }
+                if (isPermissionsGranted) {
+                    initLocationManager();
                 }
             }
         }
     }
 
-
+    private void initLocationManager(){
+        if (systemLocationManager != null) {
+            systemLocationManager = new SystemLocationManager(getActivity(), this);
+        }
+    }
 
     @Override
     public void onMapReady(GoogleMap map) {
@@ -169,4 +174,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         mapView.onLowMemory();
     }
 
+
+    @Override
+    public void onNewLocation(Location location) {
+
+    }
 }

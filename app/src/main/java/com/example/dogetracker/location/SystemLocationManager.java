@@ -11,6 +11,8 @@ import android.os.Bundle;
 import androidx.core.app.ActivityCompat;
 
 
+import com.example.dogetracker.fragments.MapFragment;
+
 import java.util.List;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -21,9 +23,11 @@ public class SystemLocationManager implements LocationListener {
     private LocationManager locationManager;
     private static final long MIN_UPDATE_INTERVAL_MS = 1000;
     private static final float MIN_DISTANCE_CHANGE_UPDATES_M = 0;
+    private LocationChanged locationChanged;
 
 
-    public SystemLocationManager(Context context) {
+    public SystemLocationManager(Context context, LocationChanged locationChanged) {
+
         if ((ActivityCompat.checkSelfPermission(context, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) || (ActivityCompat.checkSelfPermission(context, ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
             throw new SecurityException("Didn't got location permissions");
         }
@@ -39,14 +43,14 @@ public class SystemLocationManager implements LocationListener {
         }
 
         locationManager.requestLocationUpdates(providers.get(0), MIN_UPDATE_INTERVAL_MS, MIN_DISTANCE_CHANGE_UPDATES_M, this);
-
+        this.locationChanged = locationChanged;
 
     }
 
+
     @Override
     public void onLocationChanged(Location location) {
-        LocationChanged.location(this);
-
+        locationChanged.onNewLocation(location);
     }
 
     @Override
